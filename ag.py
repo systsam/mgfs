@@ -40,8 +40,7 @@ class Tensor:
       out = Tensor(self.data ** n, (self,), '**{n}')
 
       def _backward():
-          self.grad += other.data * out.grad
-          other.grad += self.data * out.grad
+          self.grad += n * (self.data ** (n-1)) * out.grad
 
       out._backward = _backward
       return out
@@ -84,11 +83,9 @@ class Tensor:
 
 
 a = Tensor(2.0)
-b = Tensor(3.0)
-d = (a*b) + a
-d.backward()
-print("a value:", a.data,", b value:", b.data,", d value:", d.data)
-print("a grad:", a.grad,", b grad:", b.grad,", d grad:", d.grad)
+b = a ** 3
+b.backward()
+print("a grad:", a.grad) #, b grad:", b.grad,", d grad:", d.grad)
 
 
 
